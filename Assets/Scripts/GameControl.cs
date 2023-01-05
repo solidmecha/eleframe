@@ -114,7 +114,7 @@ public class GameControl : MonoBehaviour {
             g.transform.localScale = new Vector2(.25f, .25f);
             BossOrder.RemoveAt(r);
             FighterScript fs=g.AddComponent<FighterScript>();
-            fs.Atk = 200;
+            fs.Atk = 100;
             fs.OuterIndex = new int[4];
             fs.InnerIndex = new int[4];
             for (int j = 0; j < 4; j++)
@@ -244,8 +244,9 @@ public class GameControl : MonoBehaviour {
     {
         Turns++;
         DropOrbs();
-        currentBoss.GetComponent<AnimScript>().isPlaying = true;
-        GetComponent<HPscript>().UpdateHP(RNG.Next(25, 76));
+        if(currentBoss != null)
+            currentBoss.GetComponent<AnimScript>().isPlaying = true;
+        GetComponent<HPscript>().UpdateHP(RNG.Next(15, 76));
         Invoke("StartTurn", .84f);
     }
 

@@ -43,15 +43,20 @@ public class FighterScript : MonoBehaviour {
         {
             if (f.Orb != null)
             {
+                int c = 0;
                 for (int i = 0; i < 3; i++)
                 {
                     if (f.Orb.OuterIndex == OuterIndex[i])
                     {
-                        HandleAction(f.Orb, i);
+                        if (i == 0)
+                            c++;
+                        HandleAction(f.Orb, i, c);
                     }
                     if (f.Orb.InnerIndex == InnerIndex[i])
                     {
-                        HandleAction(f.Orb, i); 
+                        if (i == 0)
+                            c++;
+                        HandleAction(f.Orb, i, c);
                     }
                     if (!f.Orb.matched)
                         f.RemoveOldOrb();
@@ -60,16 +65,16 @@ public class FighterScript : MonoBehaviour {
         }
     }
 
-    public void HandleAction(OrbScript orb, int i)
+    public void HandleAction(OrbScript orb, int i, int combo)
     {
         switch(i)
         {
             case 0:
-                GameControl.singleton.AttackBoss(Atk);
+                GameControl.singleton.AttackBoss(Atk+Atk*combo);
                 orb.matched = true;
                 break;
             case 1:
-                GameControl.singleton.GetComponent<HPscript>().UpdateHP(-5);
+                GameControl.singleton.GetComponent<HPscript>().UpdateHP(-7);
                 orb.matched = true;
                 break;
             case 2:
