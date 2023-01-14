@@ -107,17 +107,17 @@ public class GameControl : MonoBehaviour {
         BossOrder = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
         for(int i=0;i<4;i++)
         {
-            List<int> nums = new List<int> { 0, 1, 2, 3 };
             int r = RNG.Next(BossOrder.Count);
             GameObject g = Instantiate(Ele[BossOrder[r]], transform.GetChild(i).transform.position, Quaternion.identity) as GameObject;
             g.AddComponent<BoxCollider2D>();
             g.transform.localScale = new Vector2(.25f, .25f);
             BossOrder.RemoveAt(r);
-            FighterScript fs=g.AddComponent<FighterScript>();
+            FighterScript fs = g.AddComponent<FighterScript>();
             fs.Atk = 100;
             fs.OuterIndex = new int[4];
             fs.InnerIndex = new int[4];
-            for (int j = 0; j < 4; j++)
+            List<int> nums = new List<int> { 0, 1, 2, 3 };
+            for (int j = 3; j > -1; j--)
             {
                 r = RNG.Next(nums.Count);
                 fs.InnerIndex[j] = nums[r];
@@ -132,6 +132,20 @@ public class GameControl : MonoBehaviour {
                 r = RNG.Next(nums.Count);
                 fs.OuterIndex[j] = nums[r];
                 nums.RemoveAt(r);
+            }
+            if (i > 0)
+            {
+                r = RNG.Next(i);
+                if(RNG.Next(2)==0)
+                {
+                    fs.InnerIndex[3] = Fighters[r].InnerIndex[0];
+                    fs.OuterIndex[3] = Fighters[r].OuterIndex[0];
+                }
+                else
+                {
+                    fs.InnerIndex[3] = Fighters[r].InnerIndex[1];
+                    fs.OuterIndex[3] = Fighters[r].OuterIndex[1];
+                }
             }
             Fighters.Add(fs);
 
@@ -259,6 +273,7 @@ public class GameControl : MonoBehaviour {
                 RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + new Vector2(x, y), Vector2.zero);
                 if (hit.collider != null)
                 {
+                    hit.collider.GetComponent<OrbScript>().Invert();
                     for (int i = y - 1; i >= 0; i--)
                     {
                         if (!BoardHasOrb[x][i])

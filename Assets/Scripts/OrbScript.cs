@@ -21,6 +21,14 @@ public class OrbScript : MonoBehaviour {
         GetComponent<SpriteRenderer>().sprite = GameControl.singleton.OuterOrbs[OuterIndex];
         transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = GameControl.singleton.InnerOrbs[InnerIndex];
     }
+
+    public void Invert()
+    {
+        int i = InnerIndex;
+        InnerIndex = OuterIndex;
+        OuterIndex = i;
+        SetSprites();
+    }
 	
 	// Update is called once per frame
 	void Update () {
